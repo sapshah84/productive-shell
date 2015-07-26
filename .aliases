@@ -1,0 +1,96 @@
+alias cls='clear'
+
+alias l='ls -lrta'
+alias c='clear'
+alias vedal='vim ~/.bash_aliases'
+alias edal='sublime ~/.bash_aliases'
+alias f='find . -name "*" | grep -v staging | grep -v .git | grep -v .metadata | grep -v XML-DOC-MGMT | grep -v .pyc | grep -i '
+alias fa='find . -name "*" | grep -i '
+alias ft='find . -name "*" | grep -v staging| grep -v min.js | grep -v min.css | grep -v .metadata | grep -v .git | grep -v .pyc |  grep -v XML-DOC | xargs grep -i '
+alias pr='git log --decorate --graph --pretty=oneline --abbrev-commit --all'
+alias prbr='git log --decorate --graph --pretty=oneline --abbrev-commit'
+alias co='git checkout '
+alias st='git status '
+alias brall='git branch -va '
+alias br='git branch -v '
+alias d='git diff'
+alias dc='git diff --cached'
+alias p='pwd'
+alias down='cd /home/sapshah/Downloads'
+alias m='mvn clean install'
+alias ms='mvn clean install -DskipTests'
+alias mr='mvn install -rf '
+alias mg='cd /local/sapshah/mgmt.git'
+alias up='git fetch origin ; git stash ; git rebase origin/master ; git stash pop'
+alias ..='cd ..'
+alias cd..='cd ..'
+alias ...='cd .. ; cd ..'
+alias ....='cd .. ; cd .. ; cd ..'
+alias .....='cd .. ; cd .. ; cd .. ; cd ..'
+alias fp='ps -ef | grep '
+alias k='sudo kill -9'
+alias ls='ls -al --color'
+alias s='sublime'
+alias sa='source ~/.bash_aliases'
+alias rl='readlink -e'
+alias mw='cd apps/web/monitor'
+alias mm='cd apps/monitor'
+alias cf='git diff --name-only'
+alias ins='ssh sapshah@sapshah-bld.insieme.local'
+alias a1='sshpass -p ins3965! ssh admin@192.168.10.1'
+alias a2='sshpass -p ins3965! ssh admin@192.168.10.2'
+alias a3='sshpass -p ins3965! ssh admin@192.168.10.3'
+alias rc='/local/sapshah/mgmt.git/tools/mininet/rack-and-cable'
+alias gpr='git pull --rebase'
+alias ssls='sudo screen -ls'
+alias ssdr='sudo screen -dr'
+alias sls='screen -ls'
+alias sdr='screen -dr'
+#alias test='find . -name "*.java" ! -type d -exec bash -c "expand -t 4 \'$0\' > /tmp/e && mv /tmp/e \'$0\'" {} \;'
+#alias reptabs='expand -t 4 "$0" > /tmp/e && mv /tmp/e "$0"' {} \;'
+alias cb='clipboard'
+alias row='awk "NR=='
+alias as='adminssh'
+alias rs='rootssh'
+alias hook='scp -p -P 29418 git:hooks/commit-msg .git/hooks/'
+alias ti='touch __init__.py'
+alias gau='git add -u'
+alias com='git commit'
+alias am='git commit --amend'
+alias ama='git commit --amend -C HEAD'
+alias gamma='git add -A ; git commit --amend -C HEAD'
+alias pu='git push origin HEAD:refs/for/private/draco'
+alias dr='git push origin HEAD:refs/drafts/private/draco'
+alias rb='git rebase origin/private/draco'
+alias p1='git log -p -1'
+alias s1='git log --stat=200 -1 --stat-name-width=150'
+alias fo='git fetch origin '
+extract () {
+   if [ -f $1 ] ; then
+       case $1 in
+           *.tar.bz2)   tar xvjf $1    ;;
+           *.tar.gz)    tar xvzf $1    ;;
+           *.bz2)       bunzip2 $1     ;;
+           *.rar)       unrar x $1       ;;
+           *.gz)        gunzip $1      ;;
+           *.tar)       tar xvf $1     ;;
+           *.tbz2)      tar xvjf $1    ;;
+           *.tgz)       tar xvzf $1    ;;
+           *.zip)       unzip $1       ;;
+           *.Z)         uncompress $1  ;;
+           *.7z)        7z x $1        ;;
+           *)           echo "don't know how to extract '$1'..." ;;
+       esac
+   else
+       echo "'$1' is not a valid file!"
+   fi
+ }
+
+ff ()
+{
+    if [ $# -lt 2 ]; then
+        echo "Error: $0 [file-type] [pattern]";
+        return;
+    fi;
+    find . -name "$1" | xargs grep "$2"
+}
