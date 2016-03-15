@@ -79,10 +79,10 @@ if [[ "$TERM" != emacs ]]; then
 [[ "$terminfo[kend]" == "^[O"* ]] && bindkey -M emacs "${terminfo[kend]/O/[}" end-of-line
 fi
 
-export PATH=$HOME/local/bin:$PATH:/home/sapshah/gmeo_scripts
+export PATH=$HOME/local/bin:$PATH:
 
-source /home/sapshah/Downloads/zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /home/sapshah/Downloads/zsh_plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # bind UP and DOWN arrow keys
 zmodload zsh/terminfo
@@ -92,19 +92,6 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-#source /home/sapshah/Downloads/antigen.zsh
-
-#antigen bundle zsh-users/zsh-completions src
-
-# Setup zsh-autosuggestions
-#source /home/sapshah/Downloads/zsh_plugins/zsh-autosuggestions/autosuggestions.zsh
-
-# Enable autosuggestions automatically
-#zle-line-init() {
-#    zle autosuggest-start
-#}
-
-#zle -N zle-line-init
 
 # use ctrl+t to toggle autosuggestions(hopefully this wont be needed as
 # zsh-autosuggestions is designed to be unobtrusive)
