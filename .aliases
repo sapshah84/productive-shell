@@ -1,59 +1,72 @@
-alias cls='clear'
 
-alias l='ls -lrta'
+alias l='ls -lrt'
 alias c='clear'
-alias vedal='vim ~/.bash_aliases'
-alias edal='sublime ~/.bash_aliases'
-alias f='find . -name "*" |  grep -v .git | grep -v .metadata | grep -v XML-DOC-MGMT | grep -v .pyc | grep -i '
+alias vedal='vim ~/.aliases'
+alias edal='sublime ~/.aliases'
+alias f='find . -name "*" | grep -i --color=always'
 alias fa='find . -name "*" | grep -i '
-alias ft='find . -name "*" | grep -v staging| grep -v min.js | grep -v min.css | grep -v .metadata | grep -v .git | grep -v .pyc |  grep -v XML-DOC | xargs grep -i '
-alias pr='git log --decorate --graph --pretty=oneline --abbrev-commit --all'
-alias prbr='git log --decorate --graph --pretty=oneline --abbrev-commit'
-alias co='git checkout '
-alias st='git status '
-alias brall='git branch -va '
-alias br='git branch -v '
-alias d='git diff'
-alias dc='git diff --cached'
+alias ft='find . -name "*" | xargs grep -i --color=always'
 alias p='pwd'
-alias down='cd /home/sapshah/Downloads'
+alias down='cd ~/Downloads'
 alias m='mvn clean install'
 alias ms='mvn clean install -DskipTests'
 alias mr='mvn install -rf '
-alias mg='cd /local/sapshah/mgmt.git'
-alias up='git fetch origin ; git stash ; git rebase origin/master ; git stash pop'
-alias ..='cd ..'
 alias cd..='cd ..'
+alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 alias ....='cd .. ; cd .. ; cd ..'
 alias .....='cd .. ; cd .. ; cd .. ; cd ..'
-alias fp='ps -ef | grep '
+alias fp='ps -ef | grep -v "grep" | grep '
 alias k='sudo kill -9'
-alias ls='ls -al --color'
+alias ls='ls -lrt --color'
 alias s='sublime'
 alias sa='source ~/.bash_aliases'
 alias rl='readlink -e'
-alias mw='cd apps/web/monitor'
-alias mm='cd apps/monitor'
-alias cf='git diff --name-only'
-alias gpr='git pull --rebase'
 alias ssls='sudo screen -ls'
 alias ssdr='sudo screen -dr'
 alias sls='screen -ls'
 alias sdr='screen -dr'
 alias cb='clipboard'
 alias row='awk "NR=='
-alias gau='git add -u'
-alias com='git commit'
+alias ti='touch __init__.py'
+
+alias lf="ls -l | egrep -v '^d'"
+alias ldir="ls -l | egrep '^d'"
+
+
+# GIT Aliases
+alias pr='git log --decorate --graph --pretty=oneline --abbrev-commit --all'
+alias prbr='git log --decorate --graph --pretty=oneline --abbrev-commit'
+alias co='git checkout '
+alias st='git status '
+alias stu='git status -uno'
+alias sth='git status .'
+alias sthu='git status -uno .'
+alias brall='git branch -vva '
+alias br='git branch -vv '
+alias d='git diff '
+alias dc='git diff --cached'
+alias hard='git reset --hard'
+alias ol='git log --pretty=format:"%h%x09%an%x09%ad%x09%s"'
+alias today='git log --since=6am'
+alias gittop='git rev-parse --show-toplevel'
+alias cf='git diff --name-only'
+alias gpr='git pull --rebase'
+alias fdx='sudo git clean -fdx'
+alias hook='scp -p -P 29418 git:hooks/commit-msg .git/hooks/'
+alias au='git add --update :/'
+alias com='git add .; git commit'
 alias am='git commit --amend'
-alias ama='git commit --amend -C HEAD'
-alias gamma='git add -A ; git commit --amend -C HEAD'
-alias pu='git push origin HEAD:refs/for/private/draco'
-alias dr='git push origin HEAD:refs/drafts/private/draco'
-alias rb='git rebase origin/private/draco'
+alias gamma='git add -A :/; git commit --amend -C HEAD'
+alias gaham='git add . ; git commit --amend -C HEAD'
+alias pu='by ; git push origin $1:refs/for/$1'
+alias dr='by ; git push origin $1:refs/drafts/$1'
+alias rb='git rebase'
 alias p1='git log -p -1'
-alias s1='git log --stat=200 -1 --stat-name-width=150'
+alias s1='git log --stat -1 --stat-name-width=150'
 alias fo='git fetch origin '
+
+
 extract () {
    if [ -f $1 ] ; then
        case $1 in
@@ -82,4 +95,35 @@ ff ()
         return;
     fi;
     find . -name "$1" | xargs grep "$2"
+}
+
+
+function countdown(){
+   date1=$((`date +%s` + $1));
+   while [ "$date1" -ge `date +%s` ]; do
+     echo -ne "$(date -u --date @$(($date1 - `date +%s`)) +%H:%M:%S)\r";
+     sleep 0.1
+   done
+}
+
+function stopwatch(){
+  date1=`date +%s`;
+   while true; do
+    echo -ne "$(date -u --date @$((`date +%s` - $date1)) +%H:%M:%S)\r";
+    sleep 0.1
+   done
+}
+
+function rename_files(){
+    for file in *$1*; do
+      mv "$file" "${file//$1/$2}"
+    done
+}
+
+function find_and_replace(){
+    find . -type f -exec sed -i 's/$1/$2/g' {} +
+}
+
+function gitnumstats() {
+    git log --author="$1" --pretty=tformat: --numstat --since="1 year ago" |  gawk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s removed lines: %s total lines: %s\n", add, subs, loc }' -
 }
