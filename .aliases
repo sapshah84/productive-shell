@@ -1,40 +1,52 @@
 
-alias l='ls -lrt'
+alias ta='echo $MACIP; tmux -CC attach'
+alias j="jq '.'"
+alias tf='tail -f'
+alias scs='screen -S'
+alias l='ls -lrth'
+alias grepi='grep -i'
+alias grepv='grep -v'
+alias gi='grep -ie'
+alias gvi='grep -ive'
 alias c='clear'
+alias c="clear && printf '\e[3J'"
 alias vedal='vim ~/.aliases'
 alias edal='sublime ~/.aliases'
-alias f='find . -name "*" | grep -i --color=always'
+alias f='find . -name "*" | grep -v .git | grep -v .metadata | grep -v .pyc | grep -v "Permission denied"| grep -v __pycache__ |  grep -i --color=always'
 alias fa='find . -name "*" | grep -i '
-alias ft='find . -name "*" | xargs grep -i --color=always'
-alias p='pwd'
+alias ft='find . -name "*" -type f | grep -ve log -ve out | grep -v min.css | grep -v .metadata | grep -v .git | grep -v __pycache__ | grep -v "\.pyc" | xargs grep -i --color=always'
+alias fta='find . -name "*" -type f | xargs grep -i --color=always'
+alias rft='\ls -rt * | xargs grep'
+alias ftl='find . -name "*.log" | xargs grep -i --color=always'
+alias ftpy='find . -name "*py" -type f | xargs grep -i --color=always'
+alias ftgo='find . -name "*go" -type f | xargs grep -i --color=always'
+alias ftgo='find . -name "*go" -type f | xargs grep -i --color=always'
+alias jsonpp="python -c 'import sys, json; print(json.dumps(json.load(sys.stdin), sort_keys=True, indent=2))'"
+alias xmlpp="python -c 'import sys;import xml.dom.minidom;s=sys.stdin.read();print xml.dom.minidom.parseString(s).toprettyxml()'"
 alias down='cd ~/Downloads'
-alias m='mvn clean install'
-alias ms='mvn clean install -DskipTests'
-alias mr='mvn install -rf '
 alias cd..='cd ..'
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 alias ....='cd .. ; cd .. ; cd ..'
 alias .....='cd .. ; cd .. ; cd .. ; cd ..'
+alias .....='.....'
 alias fp='ps -ef | grep -v "grep" | grep '
 alias k='sudo kill -9'
-alias ls='ls -lrt --color'
-alias s='sublime'
-alias sa='source ~/.bash_aliases'
+alias ls='ls -lrth --color'
+alias su='export GOPATH=/local/sapshah/go; proxy; sublime'
+alias sa='source ~/.aliases'
 alias rl='readlink -e'
+alias ti='touch __init__.py'
 alias ssls='sudo screen -ls'
 alias ssdr='sudo screen -dr'
 alias sls='screen -ls'
 alias sdr='screen -dr'
 alias cb='clipboard'
 alias row='awk "NR=='
-alias ti='touch __init__.py'
+alias wcl='wc -l'
 
-alias lf="ls -l | egrep -v '^d'"
-alias ldir="ls -l | egrep '^d'"
-
-
-# GIT Aliases
+# Git Aliases
+alias b='cd `git rev-parse --show-toplevel`'
 alias pr='git log --decorate --graph --pretty=oneline --abbrev-commit --all'
 alias prbr='git log --decorate --graph --pretty=oneline --abbrev-commit'
 alias co='git checkout '
@@ -44,28 +56,40 @@ alias sth='git status .'
 alias sthu='git status -uno .'
 alias brall='git branch -vva '
 alias br='git branch -vv '
-alias d='git diff '
-alias dc='git diff --cached'
+alias d='git diff --ignore-all-space '
+alias dc='git diff --cached --ignore-all-space'
 alias hard='git reset --hard'
 alias ol='git log --pretty=format:"%h%x09%an%x09%ad%x09%s"'
+alias gfc='ol --reverse --no-merges origin/private/antares/ucs_phantom_n9k ^origin/private/aci_fc_npv'
+alias gpfc='ol -p --reverse --no-merges origin/private/antares/ucs_phantom_n9k ^origin/private/aci_fc_npv'
 alias today='git log --since=6am'
 alias gittop='git rev-parse --show-toplevel'
+alias my='git log --author=$USER'
 alias cf='git diff --name-only'
 alias gpr='git pull --rebase'
-alias fdx='sudo git clean -fdx'
+alias fdx='git clean -fdx'
 alias hook='scp -p -P 29418 git:hooks/commit-msg .git/hooks/'
 alias au='git add --update :/'
 alias com='git add .; git commit'
+alias ga='git add'
 alias am='git commit --amend'
-alias gamma='git add -A :/; git commit --amend -C HEAD'
-alias gaham='git add . ; git commit --amend -C HEAD'
+alias amc='git commit --amend -C HEAD'
+alias gamma='git add -A :/ && git commit --amend -C HEAD'
+alias gaham='git add --patch . && git commit --amend -C HEAD'
+alias gacm='git add . && git commit -m'
 alias pu='by ; git push origin $1:refs/for/$1'
 alias dr='by ; git push origin $1:refs/drafts/$1'
 alias rb='git rebase'
-alias p1='git log -p -1'
-alias s1='git log --stat -1 --stat-name-width=150'
+alias p1='git log -p --ignore-all-space -1'
+alias s1='git log --stat -1 --stat-name-width=200'
+alias s2='git log --stat -2 --stat-name-width=200'
+alias sr1='git log --stat --relative -1 --stat-name-width=150'
 alias fo='git fetch origin '
 
+
+function epoch {
+    python -c "import time; print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime($1)))"
+}
 
 extract () {
    if [ -f $1 ] ; then
@@ -88,6 +112,14 @@ extract () {
    fi
  }
 
+extract_all() {
+    for file in "$@"
+    do
+        extract $file
+    done
+}
+
+
 ff ()
 {
     if [ $# -lt 2 ]; then
@@ -96,6 +128,8 @@ ff ()
     fi;
     find . -name "$1" | xargs grep "$2"
 }
+
+
 
 
 function countdown(){
@@ -121,9 +155,33 @@ function rename_files(){
 }
 
 function find_and_replace(){
-    find . -type f -exec sed -i 's/$1/$2/g' {} +
+    grep -RiIl $1 | xargs sed -i 's/$1/$2/g'
 }
 
 function gitnumstats() {
     git log --author="$1" --pretty=tformat: --numstat --since="1 year ago" |  gawk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s removed lines: %s total lines: %s\n", add, subs, loc }' -
+}
+
+
+
+function docker_id() {
+    docker ps | grep "$1" | cut -f1 -d " "
+}
+
+function de() {
+    container_id=$(docker_id "$1")
+    c=${2:-"/bin/bash"}
+    docker exec -it "$container_id" $c
+}
+
+function ng() {
+    grep $2 $1
+}
+
+drmi() {
+     docker rmi -f $(docker images  | grep $1)
+}
+
+loop() {
+     while true; do $@ ; sleep 10; done
 }
